@@ -20,12 +20,12 @@ class ElevatorRequest {
     
     func setRandomFloors() {
         while originFloor == destinationFloor { // keep getting random values until we have two different values
-            originFloor = getRandomFloor(topFloor: self.totalFloors)
-            destinationFloor = getRandomFloor(topFloor: self.totalFloors)
+            originFloor = getRandomFloor()
+            destinationFloor = getRandomFloor()
         }
     }
     
-    func getRandomFloor(topFloor:Int) -> Int {
-        return Int(arc4random_uniform(UInt32(topFloor + 1)))
+    func getRandomFloor() -> Int {
+        return Int(arc4random_uniform(UInt32(totalFloors + 1)))
     }
 }

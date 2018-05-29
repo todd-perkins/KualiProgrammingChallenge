@@ -15,6 +15,8 @@ class Elevator : NSObject {
     
     var currentFloor:Int = 1 // the current floor of the elevator
     var floorToStop:Int = 0 // if not zero, this is a floor to stop on
+    var direction:Int = 1 // 1 = up, -1 = down
+    var containsPassengers:Bool = false // whether the elevator currently contains passengers
     
     init(num:Int){ // when we init, we only need the index since all elevators start at floor 1
         self.elevatorNum = num
@@ -29,12 +31,24 @@ class Elevator : NSObject {
     
     @objc func move(){
         if(currentFloor >= maxFloor) {
-            print("elevator \(elevatorNum) has reached the top")
+            currentFloor = maxFloor
+            //print("elevator \(elevatorNum) has reached the top")
             return
         }
-        currentFloor += 1
+        if(currentFloor <= 1) {
+            currentFloor = 1
+            //print("elevator \(elevatorNum) has reached the bottom")
+        }
+        currentFloor += direction
         print("elevator \(elevatorNum) is now at floor \(currentFloor)")
         nextFloor()
+    }
+    
+    func closeDoor() {
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { (timer:Timer) in
+            print("elevator \(self.elevatorNum) closed its door")
+            self.nextFloor()
+        }
     }
     
     func nextFloor(){

@@ -23,6 +23,10 @@ class Elevator : NSObject {
         nextFloor()
     }
     
+    func didReceiveRequest(req:ElevatorRequest){
+        
+    }
+    
     @objc func move(){
         if(currentFloor >= maxFloor) {
             print("elevator \(elevatorNum) has reached the top")

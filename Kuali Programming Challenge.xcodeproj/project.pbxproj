@@ -13,6 +13,7 @@
 		527CCA6320BDE4F80070BF5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 527CCA6220BDE4F80070BF5E /* Assets.xcassets */; };
 		527CCA6620BDE4F80070BF5E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 527CCA6420BDE4F80070BF5E /* LaunchScreen.storyboard */; };
 		527CCA6E20BDF0940070BF5E /* Elevator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527CCA6D20BDF0940070BF5E /* Elevator.swift */; };
+		527CCA7020BDF5B90070BF5E /* ElevatorRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527CCA6F20BDF5B90070BF5E /* ElevatorRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		527CCA6520BDE4F80070BF5E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		527CCA6720BDE4F80070BF5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		527CCA6D20BDF0940070BF5E /* Elevator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Elevator.swift; sourceTree = "<group>"; };
+		527CCA6F20BDF5B90070BF5E /* ElevatorRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevatorRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				527CCA5B20BDE4F40070BF5E /* AppDelegate.swift */,
 				527CCA5D20BDE4F40070BF5E /* ViewController.swift */,
 				527CCA6D20BDF0940070BF5E /* Elevator.swift */,
+				527CCA6F20BDF5B90070BF5E /* ElevatorRequest.swift */,
 				527CCA5F20BDE4F40070BF5E /* Main.storyboard */,
 				527CCA6220BDE4F80070BF5E /* Assets.xcassets */,
 				527CCA6420BDE4F80070BF5E /* LaunchScreen.storyboard */,
@@ -141,6 +144,7 @@
 				527CCA5E20BDE4F40070BF5E /* ViewController.swift in Sources */,
 				527CCA5C20BDE4F40070BF5E /* AppDelegate.swift in Sources */,
 				527CCA6E20BDF0940070BF5E /* Elevator.swift in Sources */,
+				527CCA7020BDF5B90070BF5E /* ElevatorRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

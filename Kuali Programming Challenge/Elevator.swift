@@ -23,42 +23,52 @@ class Elevator : NSObject {
     init(num:Int){ // when we init, we only need the index since all elevators start at floor 1
         self.elevatorNum = num
         super.init()
-        
-        nextFloor()
     }
     
     func canHandleRequest(req:ElevatorRequest) -> Bool { // called to see if a request can be handled
         if(!containsPassengers) { // elevator can always handle a request if it's empty
             return true
         }
-        let onTheWayUp:Bool = (req.destinationFloor > currentFloor && req.destinationFloor < floorToStop && direction == 1) // passenger is on the way when elevator is going that direction, and between current floor and where the elevator is going to stop anyway
-        let onTheWayDown:Bool = (req.destinationFloor < currentFloor && req.destinationFloor > floorToStop && direction == -1)
+        let onTheWayUp:Bool = (req.originFloor > currentFloor && req.originFloor < floorToStop && direction == 1) // passenger is on the way when elevator is going that direction, and between current floor and where the elevator is going to stop anyway
+        let onTheWayDown:Bool = (req.originFloor < currentFloor && req.originFloor > floorToStop && direction == -1)
         let passengerIsOnTheWay:Bool =  onTheWayUp || onTheWayDown
         
         if(containsPassengers && passengerIsOnTheWay) {
             return true
         }
+        
+        let onTheSameFloorAndDoorIsOpen = (currentFloor == req.originFloor && doorIsOpened)
+        if(onTheSameFloorAndDoorIsOpen) {
+            return true
+        }
+        
         return false
     }
     
     func didReceiveRequest(req:ElevatorRequest){ // once this elevator has been selected to handle a request, it's handled here
         currentRequests.append(req)
+        
+        // if not moving, head to the origin floor to pickup request
     }
     
     @objc func move(){
         if let req = needsToPickupPassengerAtCurrentFloor() { // we have a request at the current floor
             // stop at this floor and open doors
-            doorIsOpened = true
+            openDoor()
             // pickup passenger
             print("picked up passenger \(req.passengerID)")
             return
         }
         if let req = hasRequestAtCurrentFloor() { // passenger needs to get off at this floor
             // stop here and open doors
-            doorIsOpened = true
+            openDoor()
             
             // remove request
-            
+            if let index:Int = currentRequests.index(where: {$0 === req}) {
+                print("dropping off passenger \(req.passengerID)")
+                currentRequests.remove(at: index)
+            }
+            return
         }
         if(currentFloor >= maxFloor) {
             currentFloor = maxFloor
@@ -70,7 +80,7 @@ class Elevator : NSObject {
         }
         currentFloor += direction
         print("elevator \(elevatorNum) is now at floor \(currentFloor)")
-        if(currentRequests.count > 0) {
+        if(currentRequests.count > 0) { // if we don't have any passengers, then the elevator stays here
             nextFloor()
         }
     }
@@ -93,11 +103,19 @@ class Elevator : NSObject {
         return nil
     }
     
-    func closeDoor() {
+    func openDoor() {
+        doorIsOpened = true
+        
+        // wait a little bit before closing the door
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { (timer:Timer) in
-            print("elevator \(self.elevatorNum) closed its door")
-            self.nextFloor()
+            self.closeDoor()
         }
+    }
+    
+    func closeDoor() {
+        doorIsOpened = false
+        print("elevator \(self.elevatorNum) closed its door")
+        self.nextFloor()
     }
     
     func nextFloor(){

@@ -12,9 +12,13 @@ class ElevatorRequest {
     var totalFloors:Int
     var originFloor:Int = -1 // initial value = not set yet
     var destinationFloor:Int = -1 // initial value = not set yet
+    var passengerID:Int
+    static var totalPassengers = 0 // increments as passengers are picked up and delivered
     
     init(totalFloors:Int) {
+        ElevatorRequest.totalPassengers += 1
         self.totalFloors = totalFloors
+        self.passengerID = ElevatorRequest.totalPassengers
         setRandomFloors()
     }
     

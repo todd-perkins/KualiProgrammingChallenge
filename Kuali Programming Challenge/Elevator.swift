@@ -27,7 +27,7 @@ class Elevator : NSObject {
         nextFloor()
     }
     
-    func canHandleRequest(req:ElevatorRequest) -> Bool {
+    func canHandleRequest(req:ElevatorRequest) -> Bool { // called to see if a request can be handled
         if(!containsPassengers) { // elevator can always handle a request if it's empty
             return true
         }
@@ -41,24 +41,56 @@ class Elevator : NSObject {
         return false
     }
     
-    func didReceiveRequest(req:ElevatorRequest){
+    func didReceiveRequest(req:ElevatorRequest){ // once this elevator has been selected to handle a request, it's handled here
         currentRequests.append(req)
     }
     
     @objc func move(){
+        if let req = needsToPickupPassengerAtCurrentFloor() { // we have a request at the current floor
+            // stop at this floor and open doors
+            doorIsOpened = true
+            // pickup passenger
+            print("picked up passenger \(req.passengerID)")
+            return
+        }
+        if let req = hasRequestAtCurrentFloor() { // passenger needs to get off at this floor
+            // stop here and open doors
+            doorIsOpened = true
+            
+            // remove request
+            
+        }
         if(currentFloor >= maxFloor) {
             currentFloor = maxFloor
-            //print("elevator \(elevatorNum) has reached the top")
+            print("elevator \(elevatorNum) has reached the top")
         }
         if(currentFloor <= 1) {
             currentFloor = 1
-            //print("elevator \(elevatorNum) has reached the bottom")
+            print("elevator \(elevatorNum) has reached the bottom")
         }
         currentFloor += direction
         print("elevator \(elevatorNum) is now at floor \(currentFloor)")
         if(currentRequests.count > 0) {
             nextFloor()
         }
+    }
+    
+    func needsToPickupPassengerAtCurrentFloor() -> ElevatorRequest? {
+        for request in currentRequests {
+            if(request.originFloor == currentFloor) {
+                return request
+            }
+        }
+        return nil
+    }
+    
+    func hasRequestAtCurrentFloor() -> ElevatorRequest? {
+        for request in currentRequests {
+            if(request.destinationFloor == currentFloor) {
+                return request
+            }
+        }
+        return nil
     }
     
     func closeDoor() {

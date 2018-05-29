@@ -18,7 +18,9 @@ class Elevator : NSObject {
     var direction:Int = 1 // 1 = up, -1 = down
     var containsPassengers:Bool = false // whether the elevator currently contains passengers
     var currentRequests:[ElevatorRequest] = [] // requests being handled by this elevator
-    var doorIsOpened:Bool = false
+    var doorIsOpened:Bool = true
+    var totalTripsMade:Int = 0
+    var needsService:Bool = false
     
     init(num:Int){ // when we init, we only need the index since all elevators start at floor 1
         self.elevatorNum = num
@@ -26,6 +28,11 @@ class Elevator : NSObject {
     }
     
     func canHandleRequest(req:ElevatorRequest) -> Bool { // called to see if a request can be handled
+        if(needsService) {
+            print("can't run the elevator. elevator needs to be serviced.")
+            return false
+        }
+        
         if(!containsPassengers) { // elevator can always handle a request if it's empty
             return true
         }
@@ -49,6 +56,10 @@ class Elevator : NSObject {
         currentRequests.append(req)
         
         // if not moving, head to the origin floor to pickup request
+        if(currentRequests.count == 1) { // this is our first/only passenger, so elevator is stopped
+            floorToStop = req.originFloor
+            closeDoor()
+        }
     }
     
     @objc func move(){
@@ -66,6 +77,10 @@ class Elevator : NSObject {
             // remove request
             if let index:Int = currentRequests.index(where: {$0 === req}) {
                 print("dropping off passenger \(req.passengerID)")
+                totalTripsMade += 1
+                if(totalTripsMade >= 100) {
+                    serviceElevator()
+                }
                 currentRequests.remove(at: index)
             }
             return
@@ -108,11 +123,14 @@ class Elevator : NSObject {
         
         // wait a little bit before closing the door
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { (timer:Timer) in
-            self.closeDoor()
+            if(self.currentRequests.count > 0) { // if we have requests, close the door
+                self.closeDoor()
+            }
+            
         }
     }
     
-    func closeDoor() {
+    func closeDoor() { // closes door and moves elevator
         doorIsOpened = false
         print("elevator \(self.elevatorNum) closed its door")
         self.nextFloor()
@@ -122,5 +140,14 @@ class Elevator : NSObject {
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { (timer:Timer) in
             self.move()
         }
+    }
+    
+    func serviceElevator() { // simple service method
+        needsService = true
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { (timer:Timer) in
+            self.needsService = false
+            self.totalTripsMade = 0
+        }
+        
     }
 }

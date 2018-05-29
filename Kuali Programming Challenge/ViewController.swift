@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    let numOfElevators:Int = 2 // total number of elevators. change it here as it is a constant
+    let numOfElevators:Int = 5 // total number of elevators. change it here as it is a constant
     let maxFloorOfBuilding:Int = 30 // highest floor of building
     
     var elevators:[Elevator] = []
@@ -17,9 +17,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        
         createElevators()
+        createRequests()
     }
     
     func createElevators() {
@@ -32,6 +31,7 @@ class ViewController: UIViewController {
     func createRequests() {
         Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { (timer:Timer) in
             // make sure there's an available elevator
+            
             
             // if there's an available elevator, pick the closest one
             

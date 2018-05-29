@@ -100,6 +100,12 @@ class Elevator : NSObject {
         }
     }
     
+    func distanceToRequest(req:ElevatorRequest) -> Int {
+        let o:Int = req.originFloor
+        let distance = abs(currentFloor - o)
+        return distance
+    }
+    
     func needsToPickupPassengerAtCurrentFloor() -> ElevatorRequest? {
         for request in currentRequests {
             if(request.originFloor == currentFloor) {
